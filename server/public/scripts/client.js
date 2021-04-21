@@ -17,7 +17,6 @@ function handleSubmit() {
   book.author = $('#author').val();
   book.title = $('#title').val();
   book.published = $('#published').val();
-  book.isRead = $('#isRead').val();
   addBook(book);
 }
 
@@ -74,12 +73,26 @@ function renderBooks(books) {
 }
 //handler for clicks on Mark Read button
 function markReadHandler(){
-  //call AJAZ to mark book as read
-  markRead($(this).data("id"))
+  //call AJAX to mark book as read
+  markRead($(this).data("id"), "read");
 }//end markReadHandler
 
-function markRead(){
-  console.log('This book was read');
+function markRead(bookId, isRead){
+  //console.log('This book was read');
+  $.ajax({
+    method: 'PUT',
+    url: `/books/${bookId}`,
+    data: {
+      isRead: isRead
+    }
+  })
+  .then(response => {
+    //console.log('read');
+    refreshBooks();
+  })
+  .catch(err =>{
+    console.log('Error, error, error', error);
+  });
 }//markRead
 
 //Handler for clicks on Delete button
